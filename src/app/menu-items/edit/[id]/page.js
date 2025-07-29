@@ -1,13 +1,12 @@
 'use client';
 import DeleteButton from "@/components/DeleteButton";
 import Left from "@/components/icons/Left";
-import EditableImage from "@/components/layout/EditableImage";
 import MenuItemForm from "@/components/layout/MenuItemForm";
 import UserTabs from "@/components/layout/UserTabs";
-import {useProfile} from "@/components/UseProfile";
+import { useProfile } from "@/components/UseProfile";
 import Link from "next/link";
-import {redirect, useParams} from "next/navigation";
-import {useEffect, useState} from "react";
+import { redirect, useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function EditMenuItemPage() {
@@ -25,7 +24,7 @@ export default function EditMenuItemPage() {
         setMenuItem(item);
       });
     })
-  }, []);
+  }, [id]);
 
   async function handleFormSubmit(ev, formData) {
     ev.preventDefault();
