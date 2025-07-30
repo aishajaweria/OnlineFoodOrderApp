@@ -9,22 +9,28 @@ import { useEffect, useState } from "react";
 export default function MenuItemsPage() {
 
   const [menuItems, setMenuItems] = useState([]);
-  const {loading, data} = useProfile();
+  const { loading, data } = useProfile();
 
   useEffect(() => {
-  fetch('/api/menu-items')
-    .then(res => res.json())
-    .then(menuItems => setMenuItems(menuItems));
-}, [setMenuItems]);
-
+    fetch('/api/menu-items').then(res => {
+      res.json().then(menuItems => {
+        setMenuItems(menuItems);
+      });
+    })
+  }, []);
 
   if (loading) {
     return 'Loading user info...';
   }
 
-  if (!data.admin) {
+  if (!data?.email) {
+    return 'You must be logged in to view this page.';
+  }
+
+  if (!data?.admin) {
     return 'Not an admin.';
   }
+
 
   return (
     <section className="mt-8 max-w-2xl mx-auto">
@@ -43,7 +49,7 @@ export default function MenuItemsPage() {
           {menuItems?.length > 0 && menuItems.map(item => (
             <Link
               key={item._id}
-              href={'/menu-items/edit/'+item._id}
+              href={'/menu-items/edit/' + item._id}
               className="bg-gray-200 rounded-lg p-4"
             >
               <div className="relative">

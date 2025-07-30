@@ -1,4 +1,4 @@
-import mongoose, {model, models, Schema} from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const ExtraPriceSchema = new Schema({
   name: String,
@@ -6,13 +6,16 @@ const ExtraPriceSchema = new Schema({
 });
 
 const MenuItemSchema = new Schema({
-  image: {type: String},
-  name: {type: String},
-  description: {type: String},
-  category: { type: mongoose.Types.ObjectId, ref: 'Category', required: true }, // Ensure ref is set to the Category model
-  basePrice: {type: Number},
-  sizes: {type:[ExtraPriceSchema]},
-  extraIngredientPrices: {type:[ExtraPriceSchema]},
-}, {timestamps: true});
+  image: { type: String },
+  name: { type: String },
+  description: { type: String },
+  category: { type: mongoose.Types.ObjectId, ref: 'Category', required: true },
+  basePrice: { type: Number },
+  sizes: { type: [ExtraPriceSchema] },
+  extraIngredientPrices: { type: [ExtraPriceSchema] },
+}, {
+  timestamps: true,
+  collection: 'menuitems'   // ✅ This is now applied correctly
+});
 
-export const MenuItem = models?.MenuItem || model('MenuItem', MenuItemSchema);
+export const MenuItem = mongoose.models.MenuItem || mongoose.model("MenuItem", MenuItemSchema);

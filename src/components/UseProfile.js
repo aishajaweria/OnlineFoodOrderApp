@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 export function useProfile() {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -14,16 +14,21 @@ export function useProfile() {
         }
         return response.json();
       })
-      .then(data => {
-        setData(data);
+      .then(profile => {
+        if (!profile || !profile.email) {
+          setData({}); // fallback to empty object
+        } else {
+          setData(profile);
+        }
         setLoading(false);
       })
-      .catch(error => {
-        console.error('Error fetching profile:', error);
+      .catch(err => {
+        console.error('Error fetching profile:', err);
         setError('Failed to load profile');
         setLoading(false);
       });
   }, []);
+
 
   return { loading, data, error };
 }

@@ -1,40 +1,54 @@
-import {isAdmin} from "@/app/api/auth/[...nextauth]/route";
-import {Category} from "@/models/Category";
+import { isAdmin } from "@/libs/isAdmin";
+import { Category } from "@/models/Category";
 import mongoose from "mongoose";
 
-export async function POST(req) {
-  mongoose.connect(process.env.MONGO_URL);
-  const {name} = await req.json();
-  if (await isAdmin()) {
-    const categoryDoc = await Category.create({name});
-    return Response.json(categoryDoc);
-  } else {
-    return Response.json({});
+// Helper to connect once
+async function connectDB() {
+  if (mongoose.connection.readyState === 0) {
+    await mongoose.connect(process.env.MONGO_URL);
   }
+}
+
+export async function POST(req) {
+  await connectDB();
+  const { name } = await req.json();
+
+  if (!(await isAdmin())) {
+    return new Response(JSON.stringify({ error: "Not authorized" }), { status: 403 });
+  }
+
+  const categoryDoc = await Category.create({ name });
+  return new Response(JSON.stringify(categoryDoc), { status: 201 });
 }
 
 export async function PUT(req) {
-  mongoose.connect(process.env.MONGO_URL);
-  const {_id, name} = await req.json();
-  if (await isAdmin()) {
-    await Category.updateOne({_id}, {name});
+  await connectDB();
+  const { _id, name } = await req.json();
+
+  if (!(await isAdmin())) {
+    return new Response(JSON.stringify({ error: "Not authorized" }), { status: 403 });
   }
-  return Response.json(true);
+
+  await Category.updateOne({ _id }, { name });
+  return new Response(JSON.stringify(true), { status: 200 });
 }
 
 export async function GET() {
-  mongoose.connect(process.env.MONGO_URL);
-  return Response.json(
-    await Category.find()
-  );
+  await connectDB();
+
+  const categories = await Category.find();
+  return new Response(JSON.stringify(categories), { status: 200 });
 }
 
 export async function DELETE(req) {
-  mongoose.connect(process.env.MONGO_URL);
+  await connectDB();
   const url = new URL(req.url);
   const _id = url.searchParams.get('_id');
-  if (await isAdmin()) {
-    await Category.deleteOne({_id});
+
+  if (!(await isAdmin())) {
+    return new Response(JSON.stringify({ error: "Not authorized" }), { status: 403 });
   }
-  return Response.json(true);
+
+  await Category.deleteOne({ _id });
+  return new Response(JSON.stringify(true), { status: 200 });
 }

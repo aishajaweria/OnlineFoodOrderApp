@@ -1,8 +1,8 @@
-import {AppProvider} from "@/components/AppContext";
+import { AppProvider } from "@/components/AppContext";
 import Header from "@/components/layout/Header";
-import { Roboto } from 'next/font/google'
-import './globals.css'
-import {Toaster} from "react-hot-toast";
+import { Roboto } from 'next/font/google';
+import { Toaster } from "react-hot-toast";
+import './globals.css';
 
 const roboto = Roboto({ subsets: ['latin'], weight: ['400', '500', '700'] })
 

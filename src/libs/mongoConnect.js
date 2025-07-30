@@ -2,10 +2,12 @@
 import { MongoClient } from "mongodb"
 
 if (!process.env.MONGO_URL) {
-  throw new Error('Invalid/Missing environment variable: "MONGODB_URI"')
+  throw new Error('Invalid/Missing environment variable: "MONGO_URI"')
 }
 
 const uri = process.env.MONGO_URL
+console.log(`Connecting to MongoDB at ${uri}`) // Log the connection URI for debugging;
+
 const options = {}
 
 let client
