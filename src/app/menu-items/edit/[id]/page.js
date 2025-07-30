@@ -11,32 +11,37 @@ import toast from "react-hot-toast";
 
 export default function EditMenuItemPage() {
 
-  const {id} = useParams();
+  const { id } = useParams();
 
   const [menuItem, setMenuItem] = useState(null);
   const [redirectToItems, setRedirectToItems] = useState(false);
-  const {loading, data} = useProfile();
+  const { loading, data } = useProfile();
 
+  // ...existing code...
   useEffect(() => {
-    fetch('/api/menu-items').then(res => {
-      res.json().then(items => {
+    fetch('/api/menu-items')
+      .then((res) => {
+        if (!res.ok) throw new Error("Server error");
+        return res.json();
+      })
+      .then(items => {
         const item = items.find(i => i._id === id);
         setMenuItem(item);
       });
-    })
   }, [id]);
+  // ...existing code...
 
   async function handleFormSubmit(ev, formData) {
     ev.preventDefault();
-  
+
     // Validate formData.category here before submission
     if (!formData.category) {
       console.error("Category is required");
       return;
     }
-  
+
     console.log("Submitting data:", formData);
-  
+
     const savingPromise = new Promise(async (resolve, reject) => {
       try {
         const response = await fetch('/api/menu-items', {
@@ -44,7 +49,7 @@ export default function EditMenuItemPage() {
           body: JSON.stringify(formData),
           headers: { 'Content-Type': 'application/json' },
         });
-  
+
         if (response.ok) {
           const result = await response.json();
           console.log("Response from server:", result);
@@ -59,18 +64,18 @@ export default function EditMenuItemPage() {
         reject(error);
       }
     });
-  
+
     await toast.promise(savingPromise, {
       loading: 'Saving this tasty item',
       success: 'Saved',
       error: 'Error saving item. Please try again.',
     });
-  
+
     setRedirectToItems(true);
   }
   async function handleDeleteClick() {
     const promise = new Promise(async (resolve, reject) => {
-      const res = await fetch('/api/menu-items?_id='+id, {
+      const res = await fetch('/api/menu-items?_id=' + id, {
         method: 'DELETE',
       });
       if (res.ok)
