@@ -13,20 +13,28 @@ export default function MenuItemsPage() {
 
   useEffect(() => {
   fetch('/api/menu-items')
-    .then(res => {
-      if (!res.ok) throw new Error("Server error");
-      return res.text();
-    })
-    .then(text => {
-      if (!text) throw new Error("Empty response");
-      const items = JSON.parse(text);
-      const item = items.find(i => i._id === id);
-      setMenuItem(item);
+    .then(async res => {
+      if (!res.ok) {
+        throw new Error("Failed to fetch menu items");
+      }
+      const text = await res.text();
+      if (!text) {
+        setMenuItems([]);
+        return;
+      }
+      try {
+        const menuItems = JSON.parse(text);
+        setMenuItems(menuItems);
+      } catch (err) {
+        console.error("Error parsing menu items JSON:", err);
+        setMenuItems([]);
+      }
     })
     .catch(err => {
       console.error("Error fetching menu items:", err);
+      setMenuItems([]);
     });
-}, [id]);
+}, []);
 
   if (loading) {
     return 'Loading user info...';
