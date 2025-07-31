@@ -55,17 +55,12 @@ export async function POST(req) {
     await connectDB();
     const data = await req.json();
 
-    // TEMPORARILY allow all posts (bypass isAdmin for testing)
-    const menuItemDoc = await MenuItem.create(data);
-    return Response.json(menuItemDoc);
-
-    // Uncomment below to restore auth:
-    // if (await isAdmin()) {
-    //   const menuItemDoc = await MenuItem.create(data);
-    //   return Response.json(menuItemDoc);
-    // } else {
-    //   return Response.json({ error: "Unauthorized" }, { status: 403 });
-    // }
+    if (await isAdmin()) {
+      const menuItemDoc = await MenuItem.create(data);
+      return Response.json(menuItemDoc);
+    } else {
+      return Response.json({ error: "Unauthorized" }, { status: 403 });
+    }
   } catch (err) {
     console.error("❌ POST /api/menu-items error:", err);
     return Response.json({ error: "Internal Server Error" }, { status: 500 });

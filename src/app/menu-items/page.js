@@ -12,12 +12,21 @@ export default function MenuItemsPage() {
   const { loading, data } = useProfile();
 
   useEffect(() => {
-    fetch('/api/menu-items').then(res => {
-      res.json().then(menuItems => {
-        setMenuItems(menuItems);
-      });
+  fetch('/api/menu-items')
+    .then(res => {
+      if (!res.ok) throw new Error("Server error");
+      return res.text();
     })
-  }, []);
+    .then(text => {
+      if (!text) throw new Error("Empty response");
+      const items = JSON.parse(text);
+      const item = items.find(i => i._id === id);
+      setMenuItem(item);
+    })
+    .catch(err => {
+      console.error("Error fetching menu items:", err);
+    });
+}, [id]);
 
   if (loading) {
     return 'Loading user info...';
