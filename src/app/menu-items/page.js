@@ -9,32 +9,37 @@ import { useEffect, useState } from "react";
 export default function MenuItemsPage() {
 
   const [menuItems, setMenuItems] = useState([]);
+  const [menuLoading, setMenuLoading] = useState(true); // <-- add this
   const { loading, data } = useProfile();
 
   useEffect(() => {
-  fetch('/api/menu-items')
-    .then(async res => {
-      if (!res.ok) {
-        throw new Error("Failed to fetch menu items");
-      }
-      const text = await res.text();
-      if (!text) {
+    setMenuLoading(true);
+    fetch('/api/menu-items')
+      .then(async res => {
+        if (!res.ok) {
+          throw new Error("Failed to fetch menu items");
+        }
+        const text = await res.text();
+        if (!text) {
+          setMenuItems([]);
+          setMenuLoading(false);
+          return;
+        }
+        try {
+          const menuItems = JSON.parse(text);
+          setMenuItems(menuItems);
+        } catch (err) {
+          console.error("Error parsing menu items JSON:", err);
+          setMenuItems([]);
+        }
+        setMenuLoading(false);
+      })
+      .catch(err => {
+        console.error("Error fetching menu items:", err);
         setMenuItems([]);
-        return;
-      }
-      try {
-        const menuItems = JSON.parse(text);
-        setMenuItems(menuItems);
-      } catch (err) {
-        console.error("Error parsing menu items JSON:", err);
-        setMenuItems([]);
-      }
-    })
-    .catch(err => {
-      console.error("Error fetching menu items:", err);
-      setMenuItems([]);
-    });
-}, []);
+        setMenuLoading(false);
+      });
+  }, []);
 
   if (loading) {
     return 'Loading user info...';
@@ -47,6 +52,10 @@ export default function MenuItemsPage() {
   if (!data?.admin) {
     return 'Not an admin.';
   }
+  if (menuLoading) {
+    return <div>Loading menu items...</div>;
+  }
+
 
 
   return (
