@@ -3,6 +3,7 @@ import SectionHeaders from "@/components/layout/SectionHeaders";
 import MenuItem from "@/components/menu/MenuItem";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+export const dynamic = "force-dynamic";
 
 export default function HomeMenu() {
   const [bestSellers, setBestSellers] = useState([]);

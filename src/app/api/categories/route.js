@@ -1,6 +1,7 @@
 import { isAdmin } from "@/libs/isAdmin";
 import { Category } from "@/models/Category";
 import mongoose from "mongoose";
+export const dynamic = "force-dynamic";
 
 // Helper to connect once
 async function connectDB() {

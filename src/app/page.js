@@ -1,7 +1,7 @@
 import Hero from "@/components/layout/Hero";
 import HomeMenu from "@/components/layout/HomeMenu";
 import SectionHeaders from "@/components/layout/SectionHeaders";
-
+export const dynamic = "force-dynamic";
 export default function Home() {
   return (
     <>

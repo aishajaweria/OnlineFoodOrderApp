@@ -38,6 +38,7 @@
 //   }
 //   return Response.json(true);
 // }
+export const dynamic = "force-dynamic";
 import { isAdmin } from "@/libs/isAdmin";
 import { MenuItem } from "@/models/MenuItem";
 import mongoose from "mongoose";

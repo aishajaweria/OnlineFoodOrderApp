@@ -1,14 +1,13 @@
 'use client';
 import Left from "@/components/icons/Left";
-import Right from "@/components/icons/Right";
-import EditableImage from "@/components/layout/EditableImage";
 import MenuItemForm from "@/components/layout/MenuItemForm";
 import UserTabs from "@/components/layout/UserTabs";
-import {useProfile} from "@/components/UseProfile";
+import { useProfile } from "@/components/UseProfile";
 import Link from "next/link";
-import {redirect} from "next/navigation";
-import {useState} from "react";
+import { redirect } from "next/navigation";
+import { useState } from "react";
 import toast from "react-hot-toast";
+export const dynamic = "force-dynamic";
 
 export default function NewMenuItemPage() {
 
