@@ -62,8 +62,8 @@ export default function MenuItem(menuItem) {
               className="overflow-y-scroll p-2"
               style={{ maxHeight: 'calc(100vh - 100px)' }}>
               <FallBackImage
-                src={item.image}
-                alt={item.name}
+                src={image}
+                alt={name}
                 width={300} height={200}
                 className="mx-auto" />
               <h2 className="text-lg font-bold text-center mb-2">{name}</h2>
