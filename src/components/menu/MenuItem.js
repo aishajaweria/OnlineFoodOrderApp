@@ -1,6 +1,6 @@
 import { CartContext } from "@/components/AppContext";
-import FallBackImage from "@/components/FallbackImage";
 import MenuItemTile from "@/components/menu/MenuItemTile";
+import Image from "next/image";
 import { useContext, useState } from "react";
 import FlyingButton from "react-flying-item";
 import toast from "react-hot-toast";
@@ -61,7 +61,7 @@ export default function MenuItem(menuItem) {
             <div
               className="overflow-y-scroll p-2"
               style={{ maxHeight: 'calc(100vh - 100px)' }}>
-              <FallBackImage
+              <Image
                 src={image}
                 alt={name}
                 width={300} height={200}
