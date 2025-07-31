@@ -1,13 +1,13 @@
 import { CartContext } from "@/components/AppContext";
+import FallBackImage from "@/components/FallbackImage";
 import MenuItemTile from "@/components/menu/MenuItemTile";
-import Image from "next/image";
 import { useContext, useState } from "react";
 import FlyingButton from "react-flying-item";
 import toast from "react-hot-toast";
 export const dynamic = "force-dynamic";
 export default function MenuItem(menuItem) {
   const {
-    image,name,description,basePrice,
+    image, name, description, basePrice,
     sizes, extraIngredientPrices,
   } = menuItem;
   const [
@@ -15,7 +15,7 @@ export default function MenuItem(menuItem) {
   ] = useState(sizes?.[0] || null);
   const [selectedExtras, setSelectedExtras] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
-  const {addToCart} = useContext(CartContext);
+  const { addToCart } = useContext(CartContext);
 
   async function handleAddToCartButtonClick() {
     toast.success("Added to cart!")
@@ -60,10 +60,10 @@ export default function MenuItem(menuItem) {
             className="my-8 bg-white p-2 rounded-lg max-w-md">
             <div
               className="overflow-y-scroll p-2"
-              style={{maxHeight:'calc(100vh - 100px)'}}>
-              <Image
-                src={image}
-                alt={name}
+              style={{ maxHeight: 'calc(100vh - 100px)' }}>
+              <FallBackImage
+                src={item.image}
+                alt={item.name}
                 width={300} height={200}
                 className="mx-auto" />
               <h2 className="text-lg font-bold text-center mb-2">{name}</h2>
@@ -81,7 +81,7 @@ export default function MenuItem(menuItem) {
                         type="radio"
                         onChange={() => setSelectedSize(size)}
                         checked={selectedSize?.name === size.name}
-                        name="size"/>
+                        name="size" />
                       {size.name} ${basePrice + size.price}
                     </label>
                   ))}
@@ -109,7 +109,7 @@ export default function MenuItem(menuItem) {
                 targetLeft={'95%'}
                 src={image}>
                 <div className="primary sticky bottom-2"
-                     onClick={handleAddToCartButtonClick}>
+                  onClick={handleAddToCartButtonClick}>
                   Add to cart ${selectedPrice}
                 </div>
               </FlyingButton>
